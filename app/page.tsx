@@ -1,25 +1,27 @@
 import Link from "next/link";
-import { cookies } from "next/headers";
 import FilesList from "./components/files-list";
 import Layout from "./components/layout";
+import { getJwtToken } from "./utils";
+import { redirect } from "next/navigation";
 
 export default async function Home() {
   let data = { results: [] }
 
   try {
-
-    const reqCookies = await cookies();
-
-    const jwt = reqCookies.get("jwt-credential")?.value;
-
-    const res = await fetch("http://localhost:8080/sentiment-list", {
-      headers: {
-        "authorization": `Bearer ${jwt}`
-      }
-    });
-    data = (res.ok) ? await res.json() : [];
+    const jwt = await getJwtToken();
+    if (jwt) {
+      const res = await fetch("http://localhost:8080/sentiment-list", {
+        headers: {
+          "authorization": `Bearer ${jwt}`
+        }
+      });
+      data = (res.ok) ? await res.json() : [];
+    } else {
+      redirect("/login");
+    }
   } catch (e) {
-    console.error(e)
+    console.error(e);
+    redirect("/login");
   }
 
 

@@ -29,7 +29,7 @@ export default function LoginPage() {
         router.push("/");
       } else {
         const value = await resp.json();
-        setMessage(value?.message || "Access denied")
+        setMessage(value?.message || "Access denied");
       }
     } catch (e) {
       console.error(e);
