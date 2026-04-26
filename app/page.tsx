@@ -12,8 +12,8 @@ export default async function Home() {
     if (jwt) {
       const res = await fetch("http://localhost:8080/sentiment-list", {
         headers: {
-          "authorization": `Bearer ${jwt}`
-        }
+          "Cookie": `jwt-credential=${jwt}`
+        },
       });
       data = (res.ok) ? await res.json() : [];
     } else {

@@ -1,3 +1,5 @@
+import { parseHTML } from "../edit-file/utils";
+
 export default function WordsTable({ accepted = [], denied = [], caption }: { accepted: string[], denied: string[], caption?: string }) {
   const maxLen = Math.max(accepted.length, denied.length);
   let i = 0;
@@ -5,8 +7,8 @@ export default function WordsTable({ accepted = [], denied = [], caption }: { ac
 
   while (i < maxLen) {
     trs.push(<tr key={accepted[i] + denied[i]}>
-      <td className="px-4 py-2 text-gray-700">{accepted[i] ?? ""}</td>
-      <td className="px-4 py-2 text-gray-700">{denied[i] ?? ""}</td>
+      <td className="px-4 py-2 text-gray-700">{parseHTML(accepted[i]) ?? ""}</td>
+      <td className="px-4 py-2 text-gray-700">{parseHTML(denied[i]) ?? ""}</td>
     </tr>);
     i++
   }
