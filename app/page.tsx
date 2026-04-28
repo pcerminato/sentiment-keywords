@@ -24,8 +24,6 @@ export default async function Home() {
     redirect("/login");
   }
 
-
-
   return <Layout title="Sentiment advertisement words list">
     <>
       <Link href="/edit-file" className="ml-auto bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-6 rounded">Create</Link>

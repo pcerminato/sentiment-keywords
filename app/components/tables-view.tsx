@@ -7,12 +7,12 @@ import { flatFormatLists } from "../edit-file/utils";
 
 export function TablesView({ lists, error }: { lists: Lists, error?: ErrorMessage<Lists> }) {
   const [AILists, setAILists] = useState<Lists>();
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
 
   const handleAICall = async () => {
     try {
-
-
+      setLoading(true);
       const res = await fetch(`http://localhost:8080/ai`, {
         method: "POST",
         credentials: 'include',
@@ -32,13 +32,19 @@ export function TablesView({ lists, error }: { lists: Lists, error?: ErrorMessag
       }
     } catch (error) {
       console.log(error)
+    } finally {
+      setLoading(false);
     }
   }
 
   return <>
     <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-2 sm:py-4">
       <button className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Edit original</button>
-      <button className="bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded" onClick={handleAICall}>Improve with AI</button>
+      <button
+        className="bg-purple-600 hover:bg-purple-700 disabled:bg-purple-400 text-white font-bold py-2 px-4 rounded disabled"
+        onClick={handleAICall}
+        disabled={loading}
+      >{loading ? "Loading..." : "Improve with AI"}</button>
     </div>
     {error ? (<p>Error message: {error.message}</p>) : null}
     <div className="flex flex-col gap-2 flex-row sm:gap-4 sm:items-start">

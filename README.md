@@ -1,36 +1,56 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+## Tables and data
 
-## Getting Started
+The _original_ list has a format that responds to the type `Lists`:
 
-First, run the development server:
-
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+```
+{
+  lists: {
+    accepted: ["health", "nutrition"],
+    denied: ["diabetes", "obesity"]
+  }
+}
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+On the other hand, the REST endpoint `/ai` returns a format that responds to the type `MapLists`:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```
+{
+  "lists": {
+    "accepted": {
+      "health": [
+        "wellbeing",
+        "wellness",
+        "vitality"
+      ],
+      "nutrition": [
+        "nourishment",
+        "diet",
+        "balanced diet",
+        "eating habits"
+      ],
+    },
+    "denied": {
+      "diabetes": [
+        "high blood sugar",
+        "glucose levels",
+        "blood glucose",
+      ],
+      "obesity": [
+        "overweight",
+        "excess weight",
+        "weight gain"
+      ]
+    }
+  }
+}
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+In order to make this data format readable for the `<TablesView />`, it needs to be transformed with the utility function `flatFormatLists()`.
 
-## Learn More
+## The /ai endpoint response data format
 
-To learn more about Next.js, take a look at the following resources:
+This endpoint receives the original list as an input and it returns an enriched and expanded list. The format though
+is a map. A map is used as a way of classifying the data: the keys are the original words and the values are the lists of expanded words (see example above).
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+That way, the `flatFormatLists()` transforms the structure to a regular list compatible with the `Lists` type and also adds an `<em>` tag to emphasyse the orignial words. At that level the `<em>` is a string, but it is parsed to an html element using the `parseHtml()` utility in the `<WordsTable />`.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
